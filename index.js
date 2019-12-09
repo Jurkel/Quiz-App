@@ -140,7 +140,6 @@ function beginQuiz() {
 
 function createQuestionForm(itemIndex) {
   //generates questions and answers to Quiz
-  //console.log("question >>> " + STORE[itemIndex].question);
   let questionForm =  $(`
   <form>  
     <fieldset>
@@ -148,19 +147,16 @@ function createQuestionForm(itemIndex) {
     </fieldset>
     `)
 
-  let fieldSelect = $('questionForm').find('fieldset');
-  console.log("field select >>> " + fieldSelect);
+  // let fieldSelect = $('questionForm').find('fieldset');
+  // console.log("field select >>> " + fieldSelect);
 
-  // STORE[itemIndex].answers.forEach(function(itemAnswer, newIndex) {
-  //   $(`<label class="answerText" for="${newIndex}">
-  //       <input class="radio" type="radio" value="${itemAnswer}" name="answer" required>
-  //       <span>${itemAnswer}</span>
-  //     </label>`)
-  
+  let submitButton = $(`<br><button class="sumbitButton" type="button">Submit</button>`);
+  $('.questions').prepend(submitButton);
+
   for (let i=0; i<STORE[itemIndex].answers.length; i++) {
     let questionChoice = $(`
-    <label class="answerText" for="${STORE[itemIndex].answers.indexOf}">
-      <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" id="${STORE[itemIndex].answers.indexOf}" required>
+    <label class="answerText" for="${STORE[itemIndex].answers[i].indexOf()}">
+      <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" id="${STORE[itemIndex].answers[i].indexOf()}" required>
       <span>${STORE[itemIndex].answers[i]}</span>
     </label>`);
     $('.questions').prepend(questionChoice);
@@ -168,11 +164,6 @@ function createQuestionForm(itemIndex) {
   
   console.log('createQuestionForm is on');
   
-
-  let submitButton = $(`<button class="startButton" type="button">Submit</button></form>`);
-
-  $(submitButton).prepend('.questions');
-
   return questionForm;
 }
 
@@ -196,17 +187,17 @@ function wrongAnswer() {
 
 function submitAnswer() {
   //initiates submit button after an answer is chosen
-  $('.mainContainer').on('click', '.startButton', function(event) {
-    event.preventDefault();
-    $('firstPhase').hide();
-    
+  $('.mainContainer').on('click', '.sumbitButton', function(event) {
+    // event.preventDefault();
     console.log('submitAnswer is on');
-
-    let currentSelection = $('input:checked');
-    let answer = currentSelection.val();
+    $('.questions').hide();
+    $('.firstPhase').hide();
+    $('.response').show();
+    
+    let currentSelection = $('input:checked').val();
     let correct = STORE[currentQuestion].correct;
 
-    if (answer === correct) {
+    if (currentSelection === correct) {
       correctAnswer();
     } else {
       wrongAnswer();
@@ -214,26 +205,26 @@ function submitAnswer() {
   });
 }
 
-function generateNextQuestion() {
-  //generates next set of questions in quiz sequence
-  $('.mainContainer').on('click', '.nextButton', function(event) {
-    $('.firstPhase').hide();
+// function generateNextQuestion() {
+//   //generates next set of questions in quiz sequence
+//   $('.mainContainer').on('click', '.nextButton', function(event) {
+//     $('.firstPhase').hide();
     
-    console.log('generateNextQuestion is on');
+//     console.log('generateNextQuestion is on');
 
-    updateQuestion();
-  });
-}
+//     updateQuestion();
+//   });
+// }
 
-function restartQuiz() {
-  //starts the entire quiz sequence over
-  let score = 0;
-  let currentQuestion = 0;
-  $('.scoreCount').text(0);
-  $('.currentQuestion').text(0);
+// function restartQuiz() {
+//   //starts the entire quiz sequence over
+//   let score = 0;
+//   let currentQuestion = 0;
+//   $('.scoreCount').text(0);
+//   $('.currentQuestion').text(0);
   
-  console.log('restartQuiz is on');
-}
+//   console.log('restartQuiz is on');
+// }
 
 function handleQuiz() {
   beginQuiz();
