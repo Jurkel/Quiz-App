@@ -104,57 +104,49 @@ const STORE = [
 //setting variables for score count and question count
 let currentQuestion = 0;
 let score = 0;
+$('.questions').hide();
+$('.response').hide();
+$('.finish').hide();
 
+//increase score count
 function updateScore() {
-  //increase score count
   score++
   $('.scoreCount').text(score);
 }
 
+//increase question count
 function updateQuestion() {
-  //increase question count
   currentQuestion++;
   $('.questionCount').text(currentQuestion + 1);
 }
 
-function determineQuestion() {
-  //determine if the final score should be calculated
-  if (currentQuestion < STORE.length) {
-    return createQuestionForm(currentQuestion);
-  } else {
-    $('.questions').hide();
-   // $('.questionCount').text(10);
-  }
-}
-
+//initiates the start button and begins Quiz
 function beginQuiz() {
-  //initiates the start button and begins Quiz
-  $('.mainContainer').on('click', '.startButton', function(event) {
+  $('.mainContainer').on('click', '.startButton', function (event) {
     $('.firstPhase').hide();
     console.log('beginQuiz is on');
     $('.questions').show();
-   $('.questions').prepend(createQuestionForm(currentQuestion));
+    $('.questions').prepend(createQuestionForm(currentQuestion));
     $('.questionCount').text(1);
   });
 }
 
+//generates questions and answers to Quiz
 function createQuestionForm(itemIndex) {
-  //generates questions and answers to Quiz
   let questionForm =  $(`
   <form class="questionForm">  
     <fieldset class="fieldset">
       <legend class="questionText">${STORE[itemIndex].question}</legend>
-    </fieldset>
+    </fieldset><br><br>
     `);
 
-$('.questions').append(questionForm);
-  // let fieldSelect = $('questionForm').find('fieldset');
-  // console.log("field select >>> " + fieldSelect);
- // $('.response').hide();
- const answerDiv = document.createElement('div');
- answerDiv.setAttribute('class', 'answers');
+  $('.questions').append(questionForm);
+ 
+  //creating a div outside of the question to attach answers and submit button
+  const answerDiv = document.createElement('div');
+  answerDiv.setAttribute('class', 'answers');
 
- $('.fieldset').append(answerDiv);
+  $('.fieldset').append(answerDiv);
 
   for (let i=0; i<STORE[itemIndex].answers.length; i++) {
     let questionChoice = $(`
@@ -162,7 +154,7 @@ $('.questions').append(questionForm);
       <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" 
         id="${STORE[itemIndex].answers[i].indexOf()}" required>
       <span>${STORE[itemIndex].answers[i]}</span>
-    </label>`);
+    </label><br>`);
     $('.answers').append(questionChoice);
   }
   
@@ -170,45 +162,24 @@ $('.questions').append(questionForm);
   $(answerDiv).append(submitButton);
 
   console.log('createQuestionForm is on');
-   submitAnswer();
+  submitAnswer();
  // return questionForm;
 }
 
-function correctAnswer() {
-  //response if the answer is correct
-  $('.response').html(`
-    <h3>You got the answer correct!</h3>
-    <button type="button" class="nextButton">Next</button>`
-  );
-  updateScore();
-}
-
-function wrongAnswer() {
-  //response when the answer is wrong with correct answer
-  $('.response').html(`
-    <h3>Oh no! You got it wrong!</h3>
-    <p>The correct answer is ${STORE[currentQuestion].correct}</p>
-    <button type="button" class="nextButton">Next</button>`
-  );
-}
-
+//initiates submit button after an answer is chosen
 function submitAnswer() {
-  //initiates submit button after an answer is chosen
-
-  $('.mainContainer').on('click', '.submitButton', function(event) {
-    // event.preventDefault();
+  $('.mainContainer').one('click', '.submitButton', function (event) {
     
     console.log('submitAnswer is on');
     $('.questions').hide();
     $('.firstPhase').hide();
     $('.response').show();
     
-    let currentSelection = $('input:checked').val();
-    //console.log('currentSelection >>> ' + currentSelection);
+    let currentSelection = $('input:checked');
+    let answer = $(currentSelection).val();
     let correct = STORE[currentQuestion].correct;
-    //console.log('Correct >>> ' + correct);
 
-    if (currentSelection === correct) {
+    if (answer === correct) {
       correctAnswer();
     } else {
       wrongAnswer();
@@ -216,35 +187,101 @@ function submitAnswer() {
 
     $('.questionForm').remove();
   });
-  
   generateNextQuestion();
 }
 
+//response if the answer is correct
+function correctAnswer() {
+  $('.response').html(`
+    <h3>You got the answer correct!</h3><br>
+    <img src="images/thumbs-up.png" alt="facebook thumbs up"><br>
+    <button type="button" class="nextButton">Next</button>`
+  );
+  updateScore();
+}
+
+//response when the answer is wrong with correct answer
+function wrongAnswer() {
+  $('.response').html(`
+    <h3>Oh no! You got it wrong!</h3><br>
+    <img src="images/thumbs-down.png" alt="facebook thumbs down"><br>
+    <p>The correct answer is: <br>${STORE[currentQuestion].correct}</p><br>
+    <button type="button" class="nextButton">Next</button>`
+  );
+}
+
+//determines and outputs the score
+function outputScore() {
+  const bad = [
+    "Maybe not your best work. On the bright side, you can retake it!",
+    "Aww, don't be sad. You can do this!"
+  ]
+
+  const average = [
+    "You're definitely smarter than you look. Good job!",
+    "Go DM someone or post this later"
+  ]
+
+  const great = [
+    "Wow, maybe it's time to start investing in Facebook stock. You know so much!",
+    "Are you related to Mark Zuckerburg?"
+  ]
+
+  if (score >= 7) {
+    array = great;
+  } else if (score >= 4 && score < 7 ) {
+    array = average;
+  } else {
+    array = bad;
+  }
+
+  $('.finish').html(`
+    <h2>You scored an ${score} out of 10!</h2><br>
+    <h3>${array[0]}</h3><br>
+    <h4>${array[1]}</h4>
+    <br>
+    <button type="button" class="restartButton">Restart Quiz</button>
+    `);
+}
+
+//determine if the final score should be calculated
+function determineQuestion() {
+  if (currentQuestion < STORE.length) {
+    return createQuestionForm(currentQuestion);
+  } else {
+    $('.questions').hide();
+    $('.finish').show();
+    $('.header').hide();
+    return outputScore();
+  }
+}
+
+//generates next set of questions in quiz sequence
 function generateNextQuestion() {
-  //generates next set of questions in quiz sequence
-  $('.mainContainer').on('click', '.nextButton', function(event) {
+  $('.mainContainer').one('click', '.nextButton', function (event) {
     $('.firstPhase').hide();
     $('.response').hide();
     console.log('generateNextQuestion is on');
-
     updateQuestion();
-    
     $('.questions').show();
     determineQuestion();
-    
-    // createQuestionForm(currentQuestion);
   });
 }
 
-// function restartQuiz() {
-//   //starts the entire quiz sequence over
-//   let score = 0;
-//   let currentQuestion = 0;
-//   $('.scoreCount').text(0);
-//   $('.currentQuestion').text(0);
-  
-//   console.log('restartQuiz is on');
-// }
+//starts the entire quiz sequence over
+function restartQuiz() {
+  $('mainContainer').on('click', '.restartButton', function (event) {
+    console.log('restartQuiz is on');
+    // let score = 0;
+    // let currentQuestion = 0;
+    // $('.scoreCount').text(0);
+    // $('.currentQuestion').text(0);
+
+    $('.questions').hide();
+    $('.response').hide();
+    beginQuiz();
+  });
+}
 
 function handleQuiz() {
   beginQuiz();

@@ -2,16 +2,27 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  
 }
 
 body {
-  background-color: rgb(201, 237, 250);
+  background-image: url("images/bg.jpg");
+  /* background-position: center-top; */
+  background-repeat: no-repeat;
+  background-size: inherit;
   text-align: center;
   padding-bottom: 2em;
 }
 
+.header h1 {
+  font-family: "Caveat Brush", sans-serif;
+  font-size: 3em;
+  text-transform: uppercase;
+}
+
 .header {
   padding-top: 2em;
+  color: white;
 }
 
 .header li {
@@ -20,13 +31,22 @@ body {
   font-size: 1.4em;
 }
 
+.questionText, .response{
+  font-family: "Lato", sans-serif;
+  font-size: 1em;
+  margin-bottom: 1em;
+  margin-top: 1em
+}
+
 .mainbox {
   text-align: center;
   font-size: 1.2em;
 }
 
-.startContainer {
+.startContainer, .questions, .response, .finish {
   border: .2em solid black;
+  border-radius: .7em;
+  background-color: white;
   margin-left: auto;
   margin-right: auto;
   margin-top: 1em;
@@ -35,11 +55,11 @@ body {
   max-width: 70%;
 }
 
-.startButton .sumbitButton {
+.startButton {
   height: 2em;
   text-transform: uppercase;
   color: rgb(0, 0, 0);
-  border: .2em solid rgb(0, 0, 0);
+  border: .1em solid rgb(0, 0, 0);
   padding: .5em;
   margin-top: 1em;
 }
