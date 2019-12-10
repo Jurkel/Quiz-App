@@ -35,7 +35,7 @@ body {
   max-width: 70%;
 }
 
-.startButton {
+.startButton .sumbitButton {
   height: 2em;
   text-transform: uppercase;
   color: rgb(0, 0, 0);

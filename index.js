@@ -123,7 +123,7 @@ function determineQuestion() {
     return createQuestionForm(currentQuestion);
   } else {
     $('.questions').hide();
-    $('.questionCount').text(10);
+   // $('.questionCount').text(10);
   }
 }
 
@@ -133,7 +133,7 @@ function beginQuiz() {
     $('.firstPhase').hide();
     console.log('beginQuiz is on');
     $('.questions').show();
-    $('.questions').prepend(createQuestionForm(currentQuestion));
+   $('.questions').prepend(createQuestionForm(currentQuestion));
     $('.questionCount').text(1);
   });
 }
@@ -141,30 +141,37 @@ function beginQuiz() {
 function createQuestionForm(itemIndex) {
   //generates questions and answers to Quiz
   let questionForm =  $(`
-  <form>  
-    <fieldset>
+  <form class="questionForm">  
+    <fieldset class="fieldset">
       <legend class="questionText">${STORE[itemIndex].question}</legend>
     </fieldset>
-    `)
+    `);
 
+$('.questions').append(questionForm);
   // let fieldSelect = $('questionForm').find('fieldset');
   // console.log("field select >>> " + fieldSelect);
+ // $('.response').hide();
+ const answerDiv = document.createElement('div');
+ answerDiv.setAttribute('class', 'answers');
 
-  let submitButton = $(`<br><button class="sumbitButton" type="button">Submit</button>`);
-  $('.questions').prepend(submitButton);
+ $('.fieldset').append(answerDiv);
 
   for (let i=0; i<STORE[itemIndex].answers.length; i++) {
     let questionChoice = $(`
     <label class="answerText" for="${STORE[itemIndex].answers[i].indexOf()}">
-      <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" id="${STORE[itemIndex].answers[i].indexOf()}" required>
+      <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" 
+        id="${STORE[itemIndex].answers[i].indexOf()}" required>
       <span>${STORE[itemIndex].answers[i]}</span>
     </label>`);
-    $('.questions').prepend(questionChoice);
+    $('.answers').append(questionChoice);
   }
   
+  let submitButton = $(`<br><button class="submitButton" type="button">Submit</button></form>`);
+  $(answerDiv).append(submitButton);
+
   console.log('createQuestionForm is on');
-  
-  return questionForm;
+   submitAnswer();
+ // return questionForm;
 }
 
 function correctAnswer() {
@@ -187,34 +194,47 @@ function wrongAnswer() {
 
 function submitAnswer() {
   //initiates submit button after an answer is chosen
-  $('.mainContainer').on('click', '.sumbitButton', function(event) {
+
+  $('.mainContainer').on('click', '.submitButton', function(event) {
     // event.preventDefault();
+    
     console.log('submitAnswer is on');
     $('.questions').hide();
     $('.firstPhase').hide();
     $('.response').show();
     
     let currentSelection = $('input:checked').val();
+    //console.log('currentSelection >>> ' + currentSelection);
     let correct = STORE[currentQuestion].correct;
+    //console.log('Correct >>> ' + correct);
 
     if (currentSelection === correct) {
       correctAnswer();
     } else {
       wrongAnswer();
     }
+
+    $('.questionForm').remove();
   });
+  
+  generateNextQuestion();
 }
 
-// function generateNextQuestion() {
-//   //generates next set of questions in quiz sequence
-//   $('.mainContainer').on('click', '.nextButton', function(event) {
-//     $('.firstPhase').hide();
-    
-//     console.log('generateNextQuestion is on');
+function generateNextQuestion() {
+  //generates next set of questions in quiz sequence
+  $('.mainContainer').on('click', '.nextButton', function(event) {
+    $('.firstPhase').hide();
+    $('.response').hide();
+    console.log('generateNextQuestion is on');
 
-//     updateQuestion();
-//   });
-// }
+    updateQuestion();
+    
+    $('.questions').show();
+    determineQuestion();
+    
+    // createQuestionForm(currentQuestion);
+  });
+}
 
 // function restartQuiz() {
 //   //starts the entire quiz sequence over
@@ -229,8 +249,8 @@ function submitAnswer() {
 function handleQuiz() {
   beginQuiz();
   createQuestionForm();
-  submitAnswer();
-  generateNextQuestion()
+  // submitAnswer();
+  // generateNextQuestion()
   restartQuiz();
 }
 
