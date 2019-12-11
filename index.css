@@ -5,13 +5,16 @@
   
 }
 
+html { 
+  background: url(images/bg.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 body {
-  background-image: url("images/bg.jpg");
-  /* background-position: center-top; */
-  background-repeat: no-repeat;
-  background-size: inherit;
   text-align: center;
-  padding-bottom: 2em;
 }
 
 .header h1 {
@@ -31,11 +34,16 @@ body {
   font-size: 1.4em;
 }
 
-.questionText, .response{
+.questionText {
   font-family: "Lato", sans-serif;
-  font-size: 1em;
+  font-size: 1.3em;
   margin-bottom: 1em;
   margin-top: 1em
+}
+
+.response h3 {
+  font-family: "Lato", sans-serif;
+  font-size: 1.4em;
 }
 
 .mainbox {
@@ -46,21 +54,42 @@ body {
 .startContainer, .questions, .response, .finish {
   border: .2em solid black;
   border-radius: .7em;
+  font-family: "Lato", sans-serif;
   background-color: white;
   margin-left: auto;
   margin-right: auto;
   margin-top: 1em;
-  padding-top: .7em;
-  padding-bottom: .7em;
+  padding-top: 1.5em;
+  padding-bottom: .9em;
+  padding-left: .5em;
+  padding-right: .5em;
   max-width: 70%;
 }
 
-.startButton {
-  height: 2em;
+.startButton, .submitButton, .nextButton, .restartButton {
+  font-size: .9em;
   text-transform: uppercase;
   color: rgb(0, 0, 0);
   border: .1em solid rgb(0, 0, 0);
-  padding: .5em;
+  transition-duration: 0.4s;
+  border-radius: 8px;
+  padding: .4em 2em;
   margin-top: 1em;
 }
 
+.startButton:hover {
+  background-color: rgb(66, 185, 66);
+  color: white;
+}
+
+.submitButton:hover, .nextButton:hover {
+  background-color: black;
+  color: white;
+}
+
+.answerDiv {
+  text-decoration: none;
+  width: 550px;
+  display: flex;
+  justify-content: space-between;
+}

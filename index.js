@@ -151,9 +151,9 @@ function createQuestionForm(itemIndex) {
   for (let i=0; i<STORE[itemIndex].answers.length; i++) {
     let questionChoice = $(`
     <label class="answerText" for="${STORE[itemIndex].answers[i].indexOf()}">
-      <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" 
-        id="${STORE[itemIndex].answers[i].indexOf()}" required>
-      <span>${STORE[itemIndex].answers[i]}</span>
+      <input required type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" 
+      id="${STORE[itemIndex].answers[i].indexOf()}" />
+      <span>${STORE[itemIndex].answers[i]}</span><br>
     </label><br>`);
     $('.answers').append(questionChoice);
   }
@@ -214,17 +214,23 @@ function wrongAnswer() {
 function outputScore() {
   const bad = [
     "Maybe not your best work. On the bright side, you can retake it!",
-    "Aww, don't be sad. You can do this!"
+    "Aww, don't be sad. You can do this!",
+    "images/sad.png",
+    "sad emoji face"
   ]
 
   const average = [
     "You're definitely smarter than you look. Good job!",
-    "Go DM someone or post this later"
+    "Go DM someone or post this later",
+    "images/neutral.png",
+    "neutral emoji face"
   ]
 
   const great = [
     "Wow, maybe it's time to start investing in Facebook stock. You know so much!",
-    "Are you related to Mark Zuckerburg?"
+    "You must have at least 40 followers",
+    "images/happy.png",
+    "happy emoji face"
   ]
 
   if (score >= 7) {
@@ -236,12 +242,15 @@ function outputScore() {
   }
 
   $('.finish').html(`
-    <h2>You scored an ${score} out of 10!</h2><br>
+    <h2>You scored a ${score} out of 10!</h2><br>
     <h3>${array[0]}</h3><br>
-    <h4>${array[1]}</h4>
+    <h4>${array[1]}</h4><br>
+    <img src="${array[2]}" alt="${array[3]}">
     <br>
     <button type="button" class="restartButton">Restart Quiz</button>
-    `);
+  `);
+
+  restartQuiz();
 }
 
 //determine if the final score should be calculated
@@ -251,7 +260,7 @@ function determineQuestion() {
   } else {
     $('.questions').hide();
     $('.finish').show();
-    $('.header').hide();
+    $('.counters').hide();
     return outputScore();
   }
 }
@@ -270,16 +279,19 @@ function generateNextQuestion() {
 
 //starts the entire quiz sequence over
 function restartQuiz() {
-  $('mainContainer').on('click', '.restartButton', function (event) {
+  $('.mainContainer').on('click', '.restartButton', function (event) {
     console.log('restartQuiz is on');
-    // let score = 0;
-    // let currentQuestion = 0;
-    // $('.scoreCount').text(0);
-    // $('.currentQuestion').text(0);
+    let score = 0;
+    let currentQuestion = 0;
+    $('.scoreCount').text(0);
+    $('.currentQuestion').text(0);
 
     $('.questions').hide();
     $('.response').hide();
-    beginQuiz();
+    $('.finish').hide();
+    $('.startContainer').show();
+    location.reload();
+    
   });
 }
 
@@ -288,7 +300,7 @@ function handleQuiz() {
   createQuestionForm();
   // submitAnswer();
   // generateNextQuestion()
-  restartQuiz();
+  // restartQuiz();
 }
 
 handleQuiz();
