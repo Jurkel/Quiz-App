@@ -124,7 +124,6 @@ function updateQuestion() {
 function beginQuiz() {
   $('.mainContainer').on('click', '.startButton', function (event) {
     $('.firstPhase').hide();
-    console.log('beginQuiz is on');
     $('.questions').show();
     $('.questions').prepend(createQuestionForm(currentQuestion));
     $('.questionCount').text(1);
@@ -151,8 +150,8 @@ function createQuestionForm(itemIndex) {
   for (let i=0; i<STORE[itemIndex].answers.length; i++) {
     let questionChoice = $(`
     <label class="answerText" for="${STORE[itemIndex].answers[i].indexOf()}">
-      <input required type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" 
-      id="${STORE[itemIndex].answers[i].indexOf()}" />
+      <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" 
+      id="${STORE[itemIndex].answers[i].indexOf()}" required />
       <span>${STORE[itemIndex].answers[i]}</span><br>
     </label><br>`);
     $('.answers').append(questionChoice);
@@ -160,8 +159,6 @@ function createQuestionForm(itemIndex) {
   
   let submitButton = $(`<br><button class="submitButton" type="button">Submit</button></form>`);
   $(answerDiv).append(submitButton);
-
-  console.log('createQuestionForm is on');
   submitAnswer();
  // return questionForm;
 }
@@ -169,8 +166,6 @@ function createQuestionForm(itemIndex) {
 //initiates submit button after an answer is chosen
 function submitAnswer() {
   $('.mainContainer').one('click', '.submitButton', function (event) {
-    
-    console.log('submitAnswer is on');
     $('.questions').hide();
     $('.firstPhase').hide();
     $('.response').show();
@@ -270,7 +265,6 @@ function generateNextQuestion() {
   $('.mainContainer').one('click', '.nextButton', function (event) {
     $('.firstPhase').hide();
     $('.response').hide();
-    console.log('generateNextQuestion is on');
     updateQuestion();
     $('.questions').show();
     determineQuestion();
@@ -280,27 +274,13 @@ function generateNextQuestion() {
 //starts the entire quiz sequence over
 function restartQuiz() {
   $('.mainContainer').on('click', '.restartButton', function (event) {
-    console.log('restartQuiz is on');
-    let score = 0;
-    let currentQuestion = 0;
-    $('.scoreCount').text(0);
-    $('.currentQuestion').text(0);
-
-    $('.questions').hide();
-    $('.response').hide();
-    $('.finish').hide();
-    $('.startContainer').show();
     location.reload();
-    
-  });
+    });
 }
 
 function handleQuiz() {
   beginQuiz();
   createQuestionForm();
-  // submitAnswer();
-  // generateNextQuestion()
-  // restartQuiz();
 }
 
 handleQuiz();
