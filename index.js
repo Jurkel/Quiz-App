@@ -159,7 +159,6 @@ function createQuestionForm(itemIndex) {
   
   let submitButton = $(`<br><button class="submitButton" type="button">Submit</button></form>`);
   $(answerDiv).append(submitButton);
-  
   submitAnswer();
 }
 
