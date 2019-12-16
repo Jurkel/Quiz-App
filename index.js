@@ -149,9 +149,9 @@ function createQuestionForm(itemIndex) {
 
   for (let i=0; i<STORE[itemIndex].answers.length; i++) {
     let questionChoice = $(`
-    <label class="answerText" for="${STORE[itemIndex].answers[i].indexOf()}">
+    <label class="answerText" for="r${[i]}">
       <input type="radio" name="choices" value="${STORE[itemIndex].answers[i]}" 
-      id="${STORE[itemIndex].answers[i].indexOf()}" required />
+      id="r${[i]}" required />
       <span>${STORE[itemIndex].answers[i]}</span><br>
     </label><br>`);
     $('.answers').append(questionChoice);
@@ -159,8 +159,8 @@ function createQuestionForm(itemIndex) {
   
   let submitButton = $(`<br><button class="submitButton" type="button">Submit</button></form>`);
   $(answerDiv).append(submitButton);
+  
   submitAnswer();
- // return questionForm;
 }
 
 //initiates submit button after an answer is chosen
@@ -169,7 +169,7 @@ function submitAnswer() {
     $('.questions').hide();
     $('.firstPhase').hide();
     $('.response').show();
-    
+
     let currentSelection = $('input:checked');
     let answer = $(currentSelection).val();
     let correct = STORE[currentQuestion].correct;
@@ -278,9 +278,4 @@ function restartQuiz() {
     });
 }
 
-function handleQuiz() {
-  beginQuiz();
-  createQuestionForm();
-}
-
-handleQuiz();
+beginQuiz();
